@@ -52,7 +52,7 @@ interface BarChartComponentProps {
 export function BarChartComponent({ chartData }: BarChartComponentProps) {
   const [activeIndex, setActiveIndex] = useState(null);
   return (
-    <Card className="py-10">
+    <Card className="py-10 border-0">
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
