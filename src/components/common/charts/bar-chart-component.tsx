@@ -25,6 +25,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatStringToAmount } from "@/lib/utils";
+import { useState } from "react";
 
 const chartConfig = {
   desktop: {
@@ -49,8 +50,9 @@ interface BarChartComponentProps {
 }
 
 export function BarChartComponent({ chartData }: BarChartComponentProps) {
+  const [activeIndex, setActiveIndex] = useState(null);
   return (
-    <Card>
+    <Card className="py-10">
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
@@ -58,8 +60,9 @@ export function BarChartComponent({ chartData }: BarChartComponentProps) {
             data={chartData}
             layout="vertical"
             margin={{
-              right: 16,
+              right: 100,
             }}
+            barGap="20%"
           >
             <CartesianGrid horizontal={false} />
             <YAxis
@@ -68,8 +71,8 @@ export function BarChartComponent({ chartData }: BarChartComponentProps) {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-              hide
+              tickFormatter={(value) => value.slice(0, 4)}
+              fontSize={14}
             />
             <XAxis dataKey="total_expenses" type="number" hide />
             <ChartTooltip
@@ -77,19 +80,12 @@ export function BarChartComponent({ chartData }: BarChartComponentProps) {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar
-              barSize={30}
+              barSize={20}
               dataKey="total_expenses"
               layout="vertical"
               fill="var(--color-desktop)"
               radius={4}
             >
-              <LabelList
-                dataKey="label"
-                position="insideLeft"
-                offset={8}
-                className="fill-[--color-label] font-medium"
-                fontSize={12}
-              />
               <LabelList
                 dataKey="total_expenses"
                 position="right"

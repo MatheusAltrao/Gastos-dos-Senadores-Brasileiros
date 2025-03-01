@@ -10,7 +10,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Filter() {
+interface FilterProps {
+  filter: "uf" | "party";
+}
+
+export default function Filter({ filter }: FilterProps) {
   const router = useRouter();
   const [year, setYear] = useState("2024");
 
@@ -29,10 +33,16 @@ export default function Filter() {
     <div className="flex items-center justify-end gap-2">
       <span>filtrar por: </span>
       <div className="space-x-1">
-        <Button onClick={() => addParams("uf", year)} variant={"outline"}>
+        <Button
+          onClick={() => addParams("uf", year)}
+          variant={filter === "uf" ? "default" : "outline"}
+        >
           Gastos por UF
         </Button>
-        <Button onClick={() => addParams("party", year)} variant={"outline"}>
+        <Button
+          onClick={() => addParams("party", year)}
+          variant={filter === "party" ? "default" : "outline"}
+        >
           Gastos por Partido
         </Button>
       </div>
