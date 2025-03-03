@@ -31,19 +31,18 @@ export default function Filter({ filter }: FilterProps) {
 
   return (
     <div className="flex items-center justify-end gap-2">
-      <span>filtrar por: </span>
-      <div className="space-x-1">
+      <div className="space-x-1 flex items-center">
         <Button
           onClick={() => addParams("uf", year)}
           variant={filter === "uf" ? "default" : "outline"}
         >
-          Gastos por UF
+          UF
         </Button>
         <Button
           onClick={() => addParams("party", year)}
           variant={filter === "party" ? "default" : "outline"}
         >
-          Gastos por Partido
+          Partido
         </Button>
       </div>
 

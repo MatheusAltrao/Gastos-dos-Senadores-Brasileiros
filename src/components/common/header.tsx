@@ -10,10 +10,10 @@ export default function Header({ filter, year }: HeaderProps) {
     <header className=" border-b">
       <div className="flex p-4 items-center justify-between max-w-[1400px] mx-auto">
         <div>
-          <h1 className="font-bold text-2xl">
+          <h1 className="font-bold text-lg lg:text-2xl">
             Gastos dos Senadores Brasileiros
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm lg:text-base">
             Gastos dos senadores brasileiros total por{" "}
             <span className="font-bold text-primary">{filterValue} </span>em{" "}
             <span className="font-bold text-primary">{year}</span>

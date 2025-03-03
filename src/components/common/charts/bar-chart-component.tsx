@@ -1,31 +1,23 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   LabelList,
   XAxis,
   YAxis,
 } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { formatStringToAmount } from "@/lib/utils";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   desktop: {
@@ -50,17 +42,35 @@ interface BarChartComponentProps {
 }
 
 export function BarChartComponent({ chartData }: BarChartComponentProps) {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="border bg-background rounded p-2">
+          <p className="text-sm">
+            <span className="text-blue-500 font-bold">{label}: </span>
+            <span>
+              {new Intl.NumberFormat("pt-br").format(payload[0].value)}
+            </span>
+          </p>
+        </div>
+      );
+    }
+  };
+
+  const orderFromHighest = chartData.sort(
+    (a, b) => Number(b.total_expenses) - Number(a.total_expenses)
+  );
+
   return (
-    <Card className="py-10 border-0">
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+    <Card className=" border-0 ">
+      <CardContent className="p-0">
+        <ChartContainer className="min-h-[600px] w-full" config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={orderFromHighest}
             layout="vertical"
             margin={{
-              right: 100,
+              right: 20,
             }}
             barGap="20%"
           >
@@ -71,29 +81,48 @@ export function BarChartComponent({ chartData }: BarChartComponentProps) {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 4)}
-              fontSize={14}
+              hide
             />
-            <XAxis dataKey="total_expenses" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Bar
-              barSize={20}
+
+            <XAxis
+              type="number"
               dataKey="total_expenses"
-              layout="vertical"
-              fill="var(--color-desktop)"
-              radius={4}
-            >
+              tickMargin={10}
+              tickFormatter={(value) =>
+                new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(value)
+              }
+            />
+            <ChartTooltip content={CustomTooltip} />
+            <Bar dataKey="total_expenses" layout="vertical" radius={4}>
+              <LabelList
+                dataKey="uf"
+                position="insideLeft"
+                className="fill-white font-bold"
+              />
               <LabelList
                 dataKey="total_expenses"
-                position="right"
-                offset={8}
-                formatter={formatStringToAmount}
-                className="fill-foreground font-medium"
-                fontSize={12}
+                position="insideRight"
+                fontSize={10}
+                className="fill-white font-medium"
+                formatter={(value: any) =>
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(value)
+                }
               />
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  className={cn(
+                    "fill-current ",
+                    entry.label === "Brasil" ? "fill-blue-700" : "fill-blue-500"
+                  )}
+                />
+              ))}
             </Bar>
           </BarChart>
         </ChartContainer>
